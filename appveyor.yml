@@ -23,10 +23,10 @@ install:
   # Install vlc
   - ps: Start-FileDownload 'https://github.com/RSATom/libvlc-sdk/archive/64ca3daa475a6539073f7544c740725b818642b2.zip' -FileName 'vlc-2.2.2.zip'
   - 7z x vlc-2.2.2.zip -oc:\src\lib\ > NUL
-  - rename c:\src\lib\libvlc-sdk-64ca3daa475a6539073f7544c740725b818642b2 c:\src\lib\libvlc-2.2.2
-  
-  #-ps: Start-FileDownload 'http://download.videolan.org/pub/videolan/vlc/2.2.2/win32/vlc-2.2.2-win32.zip' -FileName 'vlc-2.2.2-win32.zip'
 
+  #-ps: Start-FileDownload 'http://download.videolan.org/pub/videolan/vlc/2.2.2/win32/vlc-2.2.2-win32.zip' -FileName 'vlc-2.2.2-win32.zip'
+  - cd c:\src\lib
+  - rename c:\src\lib\libvlc-sdk-64ca3daa475a6539073f7544c740725b818642b2 c:\src\lib\libvlc-2.2.2
   
   - cd c:\src\lib
   - ps: Get-ChildItem \*
