@@ -3,11 +3,11 @@ clone_folder: c:\src
 install:
   # Install Eigen
   cd c:\src\lib
-  - ps: Start-FileDownload 'http://bitbucket.org/eigen/eigen/get/3.2.10.zip' -FileName 'eigen-3.2.10.zip'
-  - ps: 7z x eigen-3.2.10.zip > NUL
+  #- ps: Start-FileDownload 'http://bitbucket.org/eigen/eigen/get/3.2.10.zip' -FileName 'eigen-3.2.10.zip'
+  #- ps: 7z x eigen-3.2.10.zip > NUL
   # Install SDL2
-  - ps: Start-FileDownload 'https://www.libsdl.org/release/SDL2-2.0.5.zip' -FileName 'SDL2-2.0.5.zip'
-  - ps: 7z x SDL2-2.0.5.zip > NUL
+  #- ps: Start-FileDownload 'https://www.libsdl.org/release/SDL2-2.0.5.zip' -FileName 'SDL2-2.0.5.zip'
+  #- ps: 7z x SDL2-2.0.5.zip > NUL
 
 before_build:
   - nuget restore
