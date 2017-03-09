@@ -1,4 +1,9 @@
+# version format
 version: '2.1.{build}-win'
+
+# Maximum number of concurrent jobs for the project
+max_jobs: 1
+
 clone_folder: c:\src
 install:
   - '"C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x86'
@@ -26,7 +31,7 @@ install:
 
   #-ps: Start-FileDownload 'http://download.videolan.org/pub/videolan/vlc/2.2.2/win32/vlc-2.2.2-win32.zip' -FileName 'vlc-2.2.2-win32.zip'
   - cd c:\src\lib
-  - rename c:\src\lib\libvlc-sdk-64ca3daa475a6539073f7544c740725b818642b2 c:\src\lib\libvlc-2.2.2
+  - rename libvlc-sdk-64ca3daa475a6539073f7544c740725b818642b2 libvlc-2.2.2
   
   - cd c:\src\lib
   - ps: Get-ChildItem \*
