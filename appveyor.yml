@@ -2,8 +2,9 @@ version: '2.1.{build}-win'
 clone_folder: c:\src
 install:
   # Install Eigen
-  cd c:\src\lib
-  - ps: Start-FileDownload 'http://bitbucket.org/eigen/eigen/get/3.2.10.zip' -FileName 'eigen-3.2.10.zip'
+  - cd c:\src\lib
+  - ps: $zipdl = 'http://bitbucket.org/eigen/eigen/get/3.2.10.zip'
+  - ps: Start-FileDownload $zipdl -FileName 'eigen-3.2.10.zip'
   #- 7z x eigen-3.2.10.zip > NUL
   # Install SDL2
   #- ps: Start-FileDownload 'https://www.libsdl.org/release/SDL2-2.0.5.zip' -FileName 'SDL2-2.0.5.zip'
@@ -11,9 +12,18 @@ install:
   # Install FreeImage
   #- ps: Start-FileDownload 'http://downloads.sourceforge.net/freeimage/FreeImage3170.zip' -FileName 'FreeImage3170.zip'
   #- 7z x FreeImage3170.zip > NUL
-  # Install Free
+  # Install FreeType
   #- ps: Start-FileDownload 'http://download.savannah.gnu.org/releases/freetype/freetype-2.7.tar.gz' -FileName 'freetype-2.7.tar.gz'
   #- 7z x freetype-2.7.tar.gz 
+  # Install curl
+  #- ps: Start-FileDownload 'https://curl.haxx.se/download/curl-7.50.3.zip' -FileName 'curl-7.50.3.zip'
+  #- 7z x curl-7.50.3.zip
+  # Install vlc
+  #- ps: Start-FileDownload 'https://github.com/RSATom/libvlc-sdk/archive/64ca3daa475a6539073f7544c740725b818642b2.zip' -FileName 'vlc-2.2.2.zip'
+  #- 7z x vlc-2.2.2.zip
+  
+  
+  #-ps: Start-FileDownload 'http://download.videolan.org/pub/videolan/vlc/2.2.2/win32/vlc-2.2.2-win32.zip' -FileName 'vlc-2.2.2-win32.zip'
 before_build:
   - nuget restore
 
