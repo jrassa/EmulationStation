@@ -18,13 +18,15 @@ cache:
   - c:\src\downloads
   
 install:
+  - ps: Get-ChildItem c:\src\*
   - '"C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x86'
   - mkdir c:\src\downloads
   - mkdir c:\src\lib
+  - ps: Get-ChildItem c:\src\lib\*
   - cd c:\src\downloads
   # Install Eigen
   - ps: Start-FileDownload 'http://bitbucket.org/eigen/eigen/get/3.2.10.zip' -FileName 'eigen-3.2.10.zip'
-  - 7z x eigen-3.2.10.zip -oc:\src\lib\eigen > NUL
+  - 7z x eigen-3.2.10.zip -oc:\src\lib > NUL
   # Install SDL2
   - ps: Start-FileDownload 'https://www.libsdl.org/release/SDL2-2.0.5.zip' -FileName 'SDL2-2.0.5.zip'
   - 7z x SDL2-2.0.5.zip -oc:\src\lib > NUL
@@ -44,6 +46,8 @@ install:
   #-ps: Start-FileDownload 'http://download.videolan.org/pub/videolan/vlc/2.2.2/win32/vlc-2.2.2-win32.zip' -FileName 'vlc-2.2.2-win32.zip'
   - cd c:\src\lib
   - rename libvlc-sdk-64ca3daa475a6539073f7544c740725b818642b2 libvlc-2.2.2
+  - rename eigen-eigen-b9cd8366d4e8 eigen
+  
   
   - ps: Get-ChildItem c:\src\lib\*
   - ps: Get-ChildItem c:\src\lib\*\*  
