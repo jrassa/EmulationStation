@@ -72,14 +72,14 @@ install:
 build_script:
   - cd c:\src\EmulationStation\build
   - dir
-  - msbuild emulationstation-all.sln #/p:Configuration=Release /p:Platform="x86"
+  - msbuild emulationstation-all.sln /p:Configuration=Release /p:Platform="x86"
 
-platform:
-  - Any CPU
+#platform:
+#  - Any CPU
 
-configuration:
-  - Debug
-  - Release
+#configuration:
+#  - Debug
+#  - Release
 
 matrix:
   fast_finish: true
