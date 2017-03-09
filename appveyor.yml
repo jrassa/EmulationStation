@@ -8,22 +8,25 @@ install:
   # Install Eigen
   - ps: $zipdl = 'http://bitbucket.org/eigen/eigen/get/3.2.10.zip'
   - ps: Start-FileDownload $zipdl -FileName 'eigen-3.2.10.zip'
-  - 7z x eigen-3.2.10.zip > NUL
+  - 7z x eigen-3.2.10.zip c:\src\lib\eigen > NUL
   # Install SDL2
   - ps: Start-FileDownload 'https://www.libsdl.org/release/SDL2-2.0.5.zip' -FileName 'SDL2-2.0.5.zip'
-  - 7z x SDL2-2.0.5.zip > NUL
+  - 7z x SDL2-2.0.5.zip c:\src\lib\SDL2-2.0.5 > NUL
   # Install FreeImage
   - ps: Start-FileDownload 'http://downloads.sourceforge.net/freeimage/FreeImage3170.zip' -FileName 'FreeImage3170.zip'
-  - 7z x FreeImage3170.zip > NUL
+  - 7z x FreeImage3170.zip  c:\src\lib\FreeImage > NUL
   # Install FreeType
   - ps: Start-FileDownload 'http://download.savannah.gnu.org/releases/freetype/freetype-2.7.tar.gz' -FileName 'freetype-2.7.tar.gz'
-  - 7z x freetype-2.7.tar.gz 
+  - 7z x freetype-2.7.tar.gz c:\src\lib\freetype-2.7 > NUL
   # Install curl
   - ps: Start-FileDownload 'https://curl.haxx.se/download/curl-7.50.3.zip' -FileName 'curl-7.50.3.zip'
-  - 7z x curl-7.50.3.zip
+  - 7z x curl-7.50.3.zip c:\src\lib\curl-7.50.3 > NUL
   # Install vlc
   - ps: Start-FileDownload 'https://github.com/RSATom/libvlc-sdk/archive/64ca3daa475a6539073f7544c740725b818642b2.zip' -FileName 'vlc-2.2.2.zip'
-  - 7z x vlc-2.2.2.zip
+  - 7z x vlc-2.2.2.zip c:\src\lib\libvlc-2.2.2 > NUL
+  
+  - cd c:\src\lib
+  - dir
   
   
   #-ps: Start-FileDownload 'http://download.videolan.org/pub/videolan/vlc/2.2.2/win32/vlc-2.2.2-win32.zip' -FileName 'vlc-2.2.2-win32.zip'
