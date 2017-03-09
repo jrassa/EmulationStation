@@ -1,1 +1,23 @@
 version: '2.1.{build}-win'
+clone_folder: c:\src
+install:
+  - ps: Install-Package boost
+  - ps: Install-Package Eigen
+  - ps: Install-Package native.freeimage
+  - ps: Install-Package freetype
+  - ps: Install-Package rmt_curl
+  - ps: Install-Package VLC.Native
+  - ps: Install-Package sdl2
+
+platform:
+  - x86
+  - Any CPU
+
+configuration:
+  - Debug
+  - Release
+
+matrix:
+  fast_finish: true
+
+  
