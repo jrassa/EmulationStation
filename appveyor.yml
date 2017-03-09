@@ -2,6 +2,7 @@ version: '2.1.{build}-win'
 clone_folder: c:\src
 install:
   # Install Eigen
+  - mkdir c:\src\lib
   - cd c:\src\lib
   - ps: $zipdl = 'http://bitbucket.org/eigen/eigen/get/3.2.10.zip'
   - ps: Start-FileDownload $zipdl -FileName 'eigen-3.2.10.zip'
