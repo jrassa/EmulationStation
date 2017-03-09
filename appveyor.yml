@@ -4,7 +4,19 @@ version: '2.1.{build}-win'
 # Maximum number of concurrent jobs for the project
 max_jobs: 1
 
+# Build worker image (VM template)
+image: Visual Studio 2015
+
+# clone directory
 clone_folder: c:\src
+
+# set clone depth
+clone_depth: 1
+
+# build cache to preserve files/folders between builds
+cache:
+  - c:\src\downloads
+  
 install:
   - '"C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x86'
   - mkdir c:\src\downloads
