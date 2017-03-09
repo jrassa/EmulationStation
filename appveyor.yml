@@ -18,21 +18,33 @@ install:
   - 7z x freetype-2.7.tar.gz -oc:\src\lib\freetype-2.7 > NUL
   # Install curl
   - ps: Start-FileDownload 'https://curl.haxx.se/download/curl-7.50.3.zip' -FileName 'curl-7.50.3.zip'
-  - 7z x curl-7.50.3.zip -oc:\src\lib\curl-7.50.3 > NUL
+  - 7z x curl-7.50.3.zip -oc:\src\lib > NUL
   # Install vlc
   - ps: Start-FileDownload 'https://github.com/RSATom/libvlc-sdk/archive/64ca3daa475a6539073f7544c740725b818642b2.zip' -FileName 'vlc-2.2.2.zip'
   - 7z x vlc-2.2.2.zip -oc:\src\lib\libvlc-2.2.2 > NUL
   
+  #-ps: Start-FileDownload 'http://download.videolan.org/pub/videolan/vlc/2.2.2/win32/vlc-2.2.2-win32.zip' -FileName 'vlc-2.2.2-win32.zip'
+
+  
   - cd c:\src\lib
-  - dir
+  - dir /s
   
   - cd c:\src\lib\curl-7.50.3\winbuild
   - nmake /f Makefile.vc mode=dll VC=14 DEBUG=yes
   - nmake /f Makefile.vc mode=dll VC=14 DEBUG=no
   
-  #-ps: Start-FileDownload 'http://download.videolan.org/pub/videolan/vlc/2.2.2/win32/vlc-2.2.2-win32.zip' -FileName 'vlc-2.2.2-win32.zip'
-
-
+  - cd c:\src\lib\SDL2-2.0.5
+  - mkdir build
+  - cd build
+  - cmake -G "Visual Studio 14 2015" ..
+  
+  
+  - cd c:\src\EmulationStation
+  - mkdir build
+  - cd build
+  - set ES_LIB_DIR=c:\src\lib
+  - cmake -g "Visual Studio 14 2015 x86" .. -DEIGEN3_INCLUDE_DIR=%ES_LIB_DIR%\eigen -DFREETYPE_INCLUDE_DIRS=%ES_LIB_DIR%\freetype-2.7\include -DFREETYPE_LIBRARY=%ES_LIB_DIR%\freetype-2.7\objs\vc2010\Win32\freetype27.lib -DFreeImage_INCLUDE_DIR=%ES_LIB_DIR%\FreeImage\Source -DFreeImage_LIBRARY=%ES_LIB_DIR%\FreeImage\Dist\x32\FreeImage.lib -DSDL2_INCLUDE_DIR=%ES_LIB_DIR%\SDL2-2.0.5\include -DSDL2_LIBRARY=%ES_LIB_DIR%\SDL2-2.0.5\build\Release\SDL2.lib;%ES_LIB_DIR%\SDL2-2.0.5\build\Release\SDL2main.lib;Imm32.lib;version.lib -DBOOST_ROOT=C:\Libraries\boost_1_62_0 -DBoost_LIBRARY_DIR=C:\Libraries\boost_1_62_0\lib32-msvc-14.0 -DCURL_INCLUDE_DIR=%ES_LIB_DIR%\curl-7.50.3\include -DCURL_LIBRARY=%ES_LIB_DIR%\curl-7.50.3\builds\libcurl-vc14-x86-release-dll-ipv6-sspi-winssl\lib\libcurl.lib -DVLC_INCLUDE_DIR=%ES_LIB_DIR%\libvlc-2.2.2\include -DVLC_LIBRARIES=%ES_LIB_DIR%\libvlc-2.2.2\lib\msvc\libvlc.lib;%ES_LIB_DIR%\libvlc-2.2.2\lib\msvc\libvlccore.lib -DVLC_VERSION=1.0.0     
+  
 platform:
   - x86
 
