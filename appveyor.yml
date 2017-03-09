@@ -72,7 +72,7 @@ install:
 build_script:
   - cd c:\src\EmulationStation\build
   - dir
-  - msbuild *.sln
+  - msbuild emulationstation-all.sln
 
 platform:
   - x86
