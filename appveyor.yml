@@ -1,13 +1,11 @@
 version: '2.1.{build}-win'
 clone_folder: c:\src
 install:
-  - ps: Install-Package boost
-  - ps: Install-Package Eigen
-  - ps: Install-Package native.freeimage
-  - ps: Install-Package freetype
-  - ps: Install-Package rmt_curl
-  - ps: Install-Package VLC.Native
-  - ps: Install-Package sdl2
+  - ps: (new-object net.webclient).DownloadFile('https://www.libsdl.org/release/SDL2-2.0.5.zip', 'SDL2-2.0.5.zip')
+  - ps: 7z x SDL2-2.0.5.zip
+
+before_build:
+  - nuget restore
 
 platform:
   - x86
