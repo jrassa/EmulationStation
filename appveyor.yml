@@ -45,9 +45,8 @@ install:
   - cd c:\src\lib
   - rename libvlc-sdk-64ca3daa475a6539073f7544c740725b818642b2 libvlc-2.2.2
   
-  - cd c:\src\lib
-  - ps: Get-ChildItem \*
-  - ps: Get-ChildItem \*\*  
+  - ps: Get-ChildItem c:\src\lib\*
+  - ps: Get-ChildItem c:\src\lib\*\*  
     
   
   - cd c:\src\lib\SDL2-2.0.5
