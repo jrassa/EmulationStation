@@ -8,7 +8,7 @@ max_jobs: 1
 image: Visual Studio 2015
 
 # clone directory
-clone_folder: c:\src
+clone_folder: c:\src\EmulationStation
 
 # set clone depth
 clone_depth: 1
@@ -22,7 +22,6 @@ install:
   - '"C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x86'
   - mkdir c:\src\downloads
   - mkdir c:\src\lib
-  - ps: Get-ChildItem c:\src\lib\*
   - cd c:\src\downloads
   # Install Eigen
   - ps: Start-FileDownload 'http://bitbucket.org/eigen/eigen/get/3.2.10.zip' -FileName 'eigen-3.2.10.zip'
