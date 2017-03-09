@@ -1,13 +1,11 @@
 version: '2.1.{build}-win'
 clone_folder: c:\src
 install:
-  # Install Eigen
   - mkdir c:\src\downloads
   - mkdir c:\src\lib
   - cd c:\src\downloads
   # Install Eigen
-  - ps: $zipdl = 'http://bitbucket.org/eigen/eigen/get/3.2.10.zip'
-  - ps: Start-FileDownload $zipdl -FileName 'eigen-3.2.10.zip'
+  - ps: Start-FileDownload 'http://bitbucket.org/eigen/eigen/get/3.2.10.zip' -FileName 'eigen-3.2.10.zip'
   - 7z x eigen-3.2.10.zip -oc:\src\lib\eigen > NUL
   # Install SDL2
   - ps: Start-FileDownload 'https://www.libsdl.org/release/SDL2-2.0.5.zip' -FileName 'SDL2-2.0.5.zip'
@@ -28,13 +26,15 @@ install:
   - cd c:\src\lib
   - dir
   
+  - cd c:\src\lib\curl-7.50.3\winbuild
+  - nmake /f Makefile.vc mode=dll VC=14 DEBUG=yes
+  - nmake /f Makefile.vc mode=dll VC=14 DEBUG=no
   
   #-ps: Start-FileDownload 'http://download.videolan.org/pub/videolan/vlc/2.2.2/win32/vlc-2.2.2-win32.zip' -FileName 'vlc-2.2.2-win32.zip'
 
 
 platform:
   - x86
-  - Any CPU
 
 configuration:
   - Debug
