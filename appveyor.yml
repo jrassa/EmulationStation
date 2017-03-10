@@ -57,7 +57,7 @@ install:
   - nmake /f Makefile.vc mode=dll VC=14 DEBUG=no
   
   - cd c:\src\lib\FreeImage
-  - "C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild" FreeImage.2013.sln /p:Configuration=Release /p:Platform="Win32" 
+  - '"C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild" FreeImage.2013.sln /p:Configuration=Release /p:Platform="Win32"' 
   
   - cd c:\src\lib\SDL2-2.0.5
   - mkdir build
