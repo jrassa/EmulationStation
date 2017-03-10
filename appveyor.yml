@@ -19,7 +19,7 @@ cache:
   
 install:
   # Run this to enable nmake
-  - SET PATH=C:\Program Files (x86)\MSBuild\12.0\bin\;%PATH%
+  #- SET PATH=C:\Program Files (x86)\MSBuild\12.0\bin\;%PATH%
   - '"C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x86'
   - mkdir c:\src\downloads
   - mkdir c:\src\lib
@@ -57,14 +57,14 @@ install:
   - nmake /f Makefile.vc mode=dll VC=14 DEBUG=no
   
   - cd c:\src\lib\FreeImage
-  - msbuild FreeImage.2013.sln /p:Configuration=Release /p:Platform="Win32"
+  - msbuild FreeImage.2013.sln /p:Configuration=Release /p:Platform="Win32" /p:PlatformToolset=v120
   
   - cd c:\src\lib\SDL2-2.0.5
   - mkdir build
   - cd build
   - cmake -G "Visual Studio 14 2015" ..
   - cd c:\src\lib\SDL2-2.0.5\build
-  - msbuild SDL2.sln /p:Configuration=Release /p:Platform="Win32"
+  - msbuild SDL2.sln /p:Configuration=Release /p:Platform="Win32" /p:PlatformToolset=v140
  
   
   - cd c:\src\EmulationStation
