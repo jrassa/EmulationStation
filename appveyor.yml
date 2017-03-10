@@ -14,7 +14,7 @@ clone_folder: c:\src\EmulationStation
 clone_depth: 1
 
 environment:
- - LINK: /FORCE:MULTIPLE
+ _LINK_: /FORCE:MULTIPLE
 
 # build cache to preserve files/folders between builds
 cache:
