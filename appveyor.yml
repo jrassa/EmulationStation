@@ -51,18 +51,23 @@ install:
   - ps: Get-ChildItem c:\src\lib\*
   - ps: Get-ChildItem c:\src\lib\*\*  
     
+  - cd c:\src\lib\FreeImage
+  - msbuild FreeImage.2013.sln /p:Configuration=Release /p:Platform="x86"
   
+  - cd c:\src\lib\freetype-2.7\builds\windows\vc2010
+  - msbuild freetype.sln /p:Configuration=Release /p:Platform="x86"
+    
   - cd c:\src\lib\SDL2-2.0.5
   - mkdir build
   - cd build
   - cmake -G "Visual Studio 14 2015" ..
-  
+  - cd c:\src\lib\SDL2-2.0.5\build
+  - msbuild SDL2.sln /p:Configuration=Release /p:Platform="x86"
   
   - cd c:\src\lib\curl-7.50.3\winbuild
   - nmake /f Makefile.vc mode=dll VC=14 DEBUG=yes
   - nmake /f Makefile.vc mode=dll VC=14 DEBUG=no
-  
-  
+    
   - cd c:\src\EmulationStation
   - mkdir build
   - cd build
@@ -72,7 +77,7 @@ install:
 build_script:
   - cd c:\src\EmulationStation\build
   - dir
-  - msbuild emulationstation-all.sln /p:Configuration=Debug /p:Platform="Any CPU"
+  - msbuild emulationstation-all.sln /p:Configuration=Release /p:Platform="x86"
 
 #platform:
 #  - Any CPU
