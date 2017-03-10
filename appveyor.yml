@@ -10,8 +10,8 @@ image: Visual Studio 2015
 # clone directory
 clone_folder: c:\src\EmulationStation
 
-# set clone depth
-clone_depth: 1
+# fetch repository as zip archive
+shallow_clone: true
 
 environment:
  _LINK_: /FORCE:MULTIPLE
@@ -82,6 +82,7 @@ build_script:
   - cd c:\src\EmulationStation\build
   - '"C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild" emulationstation-all.sln /p:Configuration=Release /p:Platform="Win32"'
 
+  - cd C:\src\EmulationStation\Release\
   - dir /s
 
 #platform:
