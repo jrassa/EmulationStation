@@ -50,21 +50,21 @@ install:
   - rename eigen-eigen-b9cd8366d4e8 eigen
   
   - cd c:\src\lib\freetype-2.7\builds\windows\vc2010
-  - msbuild freetype.sln /p:Configuration=Release /p:Platform="Win32"
+ # - msbuild freetype.sln /p:Configuration=Release /p:Platform="Win32"
     
   - cd c:\src\lib\curl-7.50.3\winbuild
-  - nmake /f Makefile.vc mode=dll VC=14 DEBUG=yes
-  - nmake /f Makefile.vc mode=dll VC=14 DEBUG=no
+ # - nmake /f Makefile.vc mode=dll VC=14 DEBUG=yes
+ # - nmake /f Makefile.vc mode=dll VC=14 DEBUG=no
   
   - cd c:\src\lib\FreeImage
-  - '"C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild" FreeImage.2013.sln /p:Configuration=Release /p:Platform="Win32"' 
+ # - '"C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild" FreeImage.2013.sln /p:Configuration=Release /p:Platform="Win32"' 
   
   - cd c:\src\lib\SDL2-2.0.5
   - mkdir build
   - cd build
   - cmake -G "Visual Studio 14 2015" ..
   - cd c:\src\lib\SDL2-2.0.5\build
-  - msbuild SDL2.sln /p:Configuration=Release /p:Platform="Win32" /p:PlatformToolset=v140
+  - '"C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild" SDL2.sln /p:Configuration=Release /p:Platform="Win32"'
  
   
   - cd c:\src\EmulationStation
