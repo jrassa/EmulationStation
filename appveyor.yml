@@ -17,8 +17,8 @@ environment:
  _LINK_: /FORCE:MULTIPLE
 
 # build cache to preserve files/folders between builds
-cache:
-  - c:\src\downloads
+#cache:
+#  - c:\src\downloads
   
 install:
   # Run this to enable nmake
