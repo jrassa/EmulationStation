@@ -47,6 +47,9 @@ install:
   - cd c:\src\lib
   - rename libvlc-sdk-64ca3daa475a6539073f7544c740725b818642b2 libvlc-2.2.2
   - rename eigen-eigen-b9cd8366d4e8 eigen
+  - cd c:\src\lib\SDL2-2.0.5\
+  - cd mkdir SDL2
+  - move include SDL2
   
 build_script:
   - cd c:\src\lib\freetype-2.7\builds\windows\vc2010
