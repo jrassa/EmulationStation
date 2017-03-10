@@ -82,7 +82,7 @@ build_script:
   - cd c:\src\EmulationStation\build
   - '"C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild" emulationstation-all.sln /p:Configuration=Release /p:Platform="Win32"'
 
-  - for /f "delims=" %a in ('cd') do @for /f %b in ('dir /b /a') do @echo %a\%b
+  - dir /s
 
 #platform:
 #  - Any CPU
