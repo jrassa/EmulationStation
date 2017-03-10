@@ -83,8 +83,7 @@ build_script:
   - '"C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild" emulationstation-all.sln /p:Configuration=Release /p:Platform="Win32"'
 
   - cd c:\src\EmulationStation
-  - 7z a EmulationStation.zip C:\src\EmulationStation\Release\*.exe C:\src\EmulationStation\Release\*.lib
-  - dir /s
+  - 7z a EmulationStation.zip C:\src\EmulationStation\Release\*.exe C:\src\EmulationStation\Release\*.exp C:\src\EmulationStation\Release\*.lib
 
 #platform:
 #  - Any CPU
