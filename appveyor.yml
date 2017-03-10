@@ -82,7 +82,8 @@ build_script:
   - cd c:\src\EmulationStation\build
   - '"C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild" emulationstation-all.sln /p:Configuration=Release /p:Platform="Win32"'
 
-  - cd C:\src\EmulationStation\Release\
+  - cd c:\src\EmulationStation
+  - 7z a EmulationStation.zip C:\src\EmulationStation\Release\*.exe C:\src\EmulationStation\Release\*.lib
   - dir /s
 
 #platform:
@@ -95,3 +96,6 @@ build_script:
 matrix:
   fast_finish: true
   
+artifacts:
+  - path: EmulationStation.zip
+    name: EmulationStation
