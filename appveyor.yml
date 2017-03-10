@@ -34,7 +34,8 @@ install:
   - 7z x FreeImage3170.zip -oc:\src\lib > NUL
   # Install FreeType
   - ps: Start-FileDownload 'http://download.savannah.gnu.org/releases/freetype/freetype-2.7.tar.gz' -FileName 'freetype-2.7.tar.gz'
-  - 7z x freetype-2.7.tar.gz -oc:\src\lib\freetype-2.7 > NUL
+  - 7z x freetype-2.7.tar.gz > NUL
+  - 7z x freetype-2.7.tar -oc:\src\lib\freetype-2.7 > NUL
   # Install curl
   - ps: Start-FileDownload 'https://curl.haxx.se/download/curl-7.50.3.zip' -FileName 'curl-7.50.3.zip'
   - 7z x curl-7.50.3.zip -oc:\src\lib > NUL
@@ -52,7 +53,7 @@ install:
   - ps: Get-ChildItem c:\src\lib\*\*  
     
   - cd c:\src\lib\FreeImage
-  - msbuild FreeImage.2013.sln /p:Configuration=Release /p:Platform="x86"
+  - msbuild FreeImage.2013.sln
   
   - cd c:\src\lib\freetype-2.7\builds\windows\vc2010
   - msbuild freetype.sln /p:Configuration=Release /p:Platform="x86"
