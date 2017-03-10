@@ -71,10 +71,7 @@ build_script:
   - cd c:\src\lib\SDL2-2.0.5\build
   - '"C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild" SDL2.sln /p:Configuration=Release /p:Platform="Win32"'
   
-  #- cd c:\src\lib\SDL2-2.0.5\
-  #- mkdir SDL2
-  #- move include SDL2
-  - ps: (Get-Content C:\src\EmulationStation\es-app\src\views\ViewController.cpp).replace('<SDL2/SDL.h>', '<SDL.h>') | Set-Content C:\src\EmulationStation\es-app\src\views\ViewController.cpp
+  #- ps: (Get-Content C:\src\EmulationStation\es-app\src\views\ViewController.cpp).replace('<SDL2/SDL.h>', '<SDL.h>') | Set-Content C:\src\EmulationStation\es-app\src\views\ViewController.cpp
   
   - cd c:\src\EmulationStation
   - mkdir build
