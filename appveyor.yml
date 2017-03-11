@@ -35,7 +35,7 @@ install:
   # Install FreeImage
   - ps: Start-FileDownload 'http://downloads.sourceforge.net/freeimage/FreeImage3170.zip' -FileName 'FreeImage3170.zip'
   - 7z x FreeImage3170.zip -oc:\src\lib > NUL
-  - ps: (Get-Content C:\src\lib\FreeImage\Source\LibTIFF4\tif_config.h).replace('#define snprintf _snprintf', '') | Set-Content C:\src\lib\FreeImage\Source\LibTIFF4\tif_config.h
+  #- ps: (Get-Content C:\src\lib\FreeImage\Source\LibTIFF4\tif_config.h).replace('#define snprintf _snprintf', '') | Set-Content C:\src\lib\FreeImage\Source\LibTIFF4\tif_config.h
     
   # Install FreeType
   - ps: Start-FileDownload 'http://download.savannah.gnu.org/releases/freetype/freetype-2.7.tar.gz' -FileName 'freetype-2.7.tar.gz'
