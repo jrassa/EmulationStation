@@ -85,6 +85,9 @@ build_script:
   - cd c:\src\EmulationStation
   - 7z a EmulationStation.zip C:\src\EmulationStation\Release\*.exe C:\src\EmulationStation\Release\*.exp C:\src\EmulationStation\Release\*.lib
   - 7z a EmulationStation.zip C:\src\downloads\vlc-2.2.2\libvlc.dll
+  - 7z a EmulationStation.zip C:\Libraries\boost_1_62_0\lib64-msvc-14.0\boost_filesystem-vc140-mt-1_62.dll
+  - 7z a EmulationStation.zip C:\Libraries\boost_1_62_0\lib64-msvc-14.0\boost_locale-vc140-mt-1_62.dll
+  - 7z a EmulationStation.zip C:\Libraries\boost_1_62_0\lib64-msvc-14.0\boost_system-vc140-mt-1_62.dll
   
   - cd C:\Libraries\boost_1_62_0
   - dir /s /b *.dll | findstr  .dll$
