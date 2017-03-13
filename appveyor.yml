@@ -57,7 +57,7 @@ install:
   
 build_script:
   - cd c:\src\lib\freetype-2.7\builds\windows\vc2010
-  - devenc freetype.sln /upgrade
+  - devenv freetype.sln /upgrade
   - dir
   - msbuild freetype.sln /p:Configuration=Release /p:Platform="Win32"
     
