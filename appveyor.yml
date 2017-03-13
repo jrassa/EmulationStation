@@ -57,6 +57,8 @@ install:
   
 build_script:
   - cd c:\src\lib\freetype-2.7\builds\windows\vc2010
+  - devenc freetype.sln /upgrade
+  - dir
   - msbuild freetype.sln /p:Configuration=Release /p:Platform="Win32"
     
   - cd c:\src\lib\curl-7.50.3\winbuild
@@ -64,14 +66,18 @@ build_script:
   - nmake /f Makefile.vc mode=dll VC=14 DEBUG=no
   
   - cd c:\src\lib\FreeImage
-  - '"C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild" FreeImage.2013.sln /p:Configuration=Release /p:Platform="Win32"' 
+  - devenv FreeImage.2013.sln /upgrade 
+  - dir
+  - msbuild FreeImage.2013.sln /p:Configuration=Release /p:Platform="Win32"
+  #- '"C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild" FreeImage.2013.sln /p:Configuration=Release /p:Platform="Win32"' 
   
   - cd c:\src\lib\SDL2-2.0.5
   - mkdir build
   - cd build
   - cmake -G "Visual Studio 14 2015" ..
   - cd c:\src\lib\SDL2-2.0.5\build
-  - '"C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild" SDL2.sln /p:Configuration=Release /p:Platform="Win32"'
+  - msbuild SDL2.sln /p:Configuration=Release /p:Platform="Win32"
+  #- '"C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild" SDL2.sln /p:Configuration=Release /p:Platform="Win32"'
   
   - cd c:\src\EmulationStation
   - mkdir build
@@ -80,7 +86,8 @@ build_script:
   - cmake -g "Visual Studio 14 2015 x86" .. -DEIGEN3_INCLUDE_DIR=%ES_LIB_DIR%\eigen -DFREETYPE_INCLUDE_DIRS=%ES_LIB_DIR%\freetype-2.7\include -DFREETYPE_LIBRARY=%ES_LIB_DIR%\freetype-2.7\objs\vc2010\Win32\freetype27.lib -DFreeImage_INCLUDE_DIR=%ES_LIB_DIR%\FreeImage\Source -DFreeImage_LIBRARY=%ES_LIB_DIR%\FreeImage\Dist\x32\FreeImage.lib -DSDL2_INCLUDE_DIR=%ES_LIB_DIR%\SDL2-2.0.5\include -DSDL2_LIBRARY=%ES_LIB_DIR%\SDL2-2.0.5\build\Release\SDL2.lib;%ES_LIB_DIR%\SDL2-2.0.5\build\Release\SDL2main.lib;Imm32.lib;version.lib -DBOOST_ROOT=C:\Libraries\boost_1_62_0 -DBoost_LIBRARY_DIR=C:\Libraries\boost_1_62_0\lib32-msvc-14.0 -DCURL_INCLUDE_DIR=%ES_LIB_DIR%\curl-7.50.3\include -DCURL_LIBRARY=%ES_LIB_DIR%\curl-7.50.3\builds\libcurl-vc14-x86-release-dll-ipv6-sspi-winssl\lib\libcurl.lib -DVLC_INCLUDE_DIR=%ES_LIB_DIR%\libvlc-2.2.2\include -DVLC_LIBRARIES=%ES_LIB_DIR%\libvlc-2.2.2\lib\msvc\libvlc.lib;%ES_LIB_DIR%\libvlc-2.2.2\lib\msvc\libvlccore.lib -DVLC_VERSION=1.0.0     
 
   - cd c:\src\EmulationStation\build
-  - '"C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild" emulationstation-all.sln /p:Configuration=Release /p:Platform="Win32"'
+  - msbuild emulationstation-all.sln /p:Configuration=Release /p:Platform="Win32"
+  #- '"C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild" emulationstation-all.sln /p:Configuration=Release /p:Platform="Win32"'
 
   - cd c:\src\EmulationStation
   - 7z a EmulationStation.zip C:\src\EmulationStation\Release\*.exe
