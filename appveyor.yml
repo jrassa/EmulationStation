@@ -65,10 +65,10 @@ build_script:
   - msbuild freetype.sln /p:Configuration=Release /p:Platform="Win32"
     
   - cd c:\src\lib\FreeImage
-  - dir
-  - rm *.vcxproj
+  #- dir
+  #- rm *.vcxproj
   - '"C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\devenv.com"  FreeImage.2013.sln /upgrade'
-  - dir
+  #- dir
   - msbuild FreeImage.2013.sln /p:Configuration=Release /p:Platform="Win32"
   #- '"C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild" FreeImage.2013.sln /p:Configuration=Release /p:Platform="Win32"' 
   
