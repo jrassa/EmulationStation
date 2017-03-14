@@ -1,5 +1,5 @@
 # version format
-version: '2.1.{build}-win'
+version: '2.1.5-{build}-win'
 
 # Maximum number of concurrent jobs for the project
 max_jobs: 1
