@@ -19,7 +19,10 @@ environment:
 # build cache to preserve files/folders between builds
 #cache:
 #  - c:\src\downloads
-  
+
+init:
+  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+
 install:
   # Run this to enable nmake
   - '"C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x86'
@@ -101,6 +104,9 @@ build_script:
   - 7z a EmulationStation.zip C:\Libraries\boost_1_62_0\lib64-msvc-14.0\boost_filesystem-vc140-mt-1_62.dll
   - 7z a EmulationStation.zip C:\Libraries\boost_1_62_0\lib64-msvc-14.0\boost_locale-vc140-mt-1_62.dll
   - 7z a EmulationStation.zip C:\Libraries\boost_1_62_0\lib64-msvc-14.0\boost_system-vc140-mt-1_62.dll
+
+on_finish:
+  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
   
 #platform:
