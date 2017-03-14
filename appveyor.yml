@@ -60,14 +60,14 @@ build_script:
   - cd c:\src\lib\freetype-2.7\builds\windows\vc2010
   - dir
   - rm *.vcxproj
-  - "C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\devenv.com"  freetype.sln /upgrade
+  - '"C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\devenv.com"  freetype.sln /upgrade'
   - dir
   - msbuild freetype.sln /p:Configuration=Release /p:Platform="Win32"
     
   - cd c:\src\lib\FreeImage
   - dir
   - rm *.vcxproj
-  - "C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\devenv.com"  FreeImage.2013.sln /upgrade 
+  - '"C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\devenv.com"  FreeImage.2013.sln /upgrade'
   - dir
   - msbuild FreeImage.2013.sln /p:Configuration=Release /p:Platform="Win32"
   #- '"C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild" FreeImage.2013.sln /p:Configuration=Release /p:Platform="Win32"' 
