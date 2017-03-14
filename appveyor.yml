@@ -20,8 +20,8 @@ environment:
 #cache:
 #  - c:\src\downloads
 
-init:
-  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+#init:
+  #- ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
 install:
   - mkdir c:\src\downloads
@@ -58,19 +58,12 @@ install:
   
 build_script:
   - cd c:\src\lib\freetype-2.7\builds\windows\vc2010
-  #- dir 
-  #- rm *.vcxproj
   - '"C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\devenv.com"  freetype.sln /upgrade'
-  #- dir
   - msbuild freetype.sln /p:Configuration=Release /p:Platform="Win32"
     
   - cd c:\src\lib\FreeImage
-  #- dir
-  #- rm *.vcxproj
   - '"C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\devenv.com"  FreeImage.2013.sln /upgrade'
-  #- dir
   - msbuild FreeImage.2013.sln /p:Configuration=Release /p:Platform="Win32"
-  #- '"C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild" FreeImage.2013.sln /p:Configuration=Release /p:Platform="Win32"' 
   
   - cd c:\src\lib\curl-7.50.3\winbuild
   # Run this to enable nmake
@@ -83,8 +76,7 @@ build_script:
   - cd build
   - cmake -G "Visual Studio 14 2015" ..
   - cd c:\src\lib\SDL2-2.0.5\build
-  - msbuild SDL2.sln /p:Configuration=Release /p:Platform="Win32"
-  #- '"C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild" SDL2.sln /p:Configuration=Release /p:Platform="Win32"'
+  - '"C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild" SDL2.sln /p:Configuration=Release /p:Platform="Win32"'
   
   - cd c:\src\EmulationStation
   - mkdir build
@@ -93,8 +85,7 @@ build_script:
   - cmake -g "Visual Studio 14 2015 x86" .. -DEIGEN3_INCLUDE_DIR=%ES_LIB_DIR%\eigen -DFREETYPE_INCLUDE_DIRS=%ES_LIB_DIR%\freetype-2.7\include -DFREETYPE_LIBRARY=%ES_LIB_DIR%\freetype-2.7\objs\vc2010\Win32\freetype27.lib -DFreeImage_INCLUDE_DIR=%ES_LIB_DIR%\FreeImage\Source -DFreeImage_LIBRARY=%ES_LIB_DIR%\FreeImage\Dist\x32\FreeImage.lib -DSDL2_INCLUDE_DIR=%ES_LIB_DIR%\SDL2-2.0.5\include -DSDL2_LIBRARY=%ES_LIB_DIR%\SDL2-2.0.5\build\Release\SDL2.lib;%ES_LIB_DIR%\SDL2-2.0.5\build\Release\SDL2main.lib;Imm32.lib;version.lib -DBOOST_ROOT=C:\Libraries\boost_1_62_0 -DBoost_LIBRARY_DIR=C:\Libraries\boost_1_62_0\lib32-msvc-14.0 -DCURL_INCLUDE_DIR=%ES_LIB_DIR%\curl-7.50.3\include -DCURL_LIBRARY=%ES_LIB_DIR%\curl-7.50.3\builds\libcurl-vc14-x86-release-dll-ipv6-sspi-winssl\lib\libcurl.lib -DVLC_INCLUDE_DIR=%ES_LIB_DIR%\libvlc-2.2.2\include -DVLC_LIBRARIES=%ES_LIB_DIR%\libvlc-2.2.2\lib\msvc\libvlc.lib;%ES_LIB_DIR%\libvlc-2.2.2\lib\msvc\libvlccore.lib -DVLC_VERSION=1.0.0     
 
   - cd c:\src\EmulationStation\build
-  - msbuild emulationstation-all.sln /p:Configuration=Release /p:Platform="Win32"
-  #- '"C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild" emulationstation-all.sln /p:Configuration=Release /p:Platform="Win32"'
+  - '"C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild" emulationstation-all.sln /p:Configuration=Release /p:Platform="Win32"'
 
   - cd c:\src\EmulationStation
   - 7z a EmulationStation.zip C:\src\EmulationStation\Release\*.exe
@@ -105,8 +96,8 @@ build_script:
   - 7z a EmulationStation.zip C:\Libraries\boost_1_62_0\lib64-msvc-14.0\boost_locale-vc140-mt-1_62.dll
   - 7z a EmulationStation.zip C:\Libraries\boost_1_62_0\lib64-msvc-14.0\boost_system-vc140-mt-1_62.dll
 
-on_finish:
-  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+#on_finish:
+ # - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
   
 #platform:
