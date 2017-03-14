@@ -57,6 +57,8 @@ install:
   
 build_script:
   - cd c:\src\lib\freetype-2.7\builds\windows\vc2010
+  - dir
+  - rm *.vcxproj
   - devenv freetype.sln /upgrade
   - dir
   - msbuild freetype.sln /p:Configuration=Release /p:Platform="Win32"
@@ -66,6 +68,8 @@ build_script:
   - nmake /f Makefile.vc mode=dll VC=14 DEBUG=no
   
   - cd c:\src\lib\FreeImage
+  - dir
+  - rm *.vcxproj
   - devenv FreeImage.2013.sln /upgrade 
   - dir
   - msbuild FreeImage.2013.sln /p:Configuration=Release /p:Platform="Win32"
