@@ -27,56 +27,58 @@ install:
   - mkdir c:\src\downloads
   - mkdir c:\src\lib
   - cd c:\src\downloads
+  - ps: Start-FileDownload 'https://drive.google.com/uc?export=download&id=0B7goJ1BBoiPOZ2s4MFBwbzBkd0k' -FileName 'emulationstation-dependencies.zip'
+  - 7z x emulationstation-dependencies.zip -oC:\src\lib > NUL
   # Install Eigen
-  - ps: Start-FileDownload 'http://bitbucket.org/eigen/eigen/get/3.2.10.zip' -FileName 'eigen-3.2.10.zip'
-  - 7z x eigen-3.2.10.zip -oc:\src\lib > NUL
+  #- ps: Start-FileDownload 'http://bitbucket.org/eigen/eigen/get/3.2.10.zip' -FileName 'eigen-3.2.10.zip'
+  #- 7z x eigen-3.2.10.zip -oc:\src\lib > NUL
   # Install SDL2
-  - ps: Start-FileDownload 'https://www.libsdl.org/release/SDL2-2.0.5.zip' -FileName 'SDL2-2.0.5.zip'
-  - 7z x SDL2-2.0.5.zip -oc:\src\lib > NUL
+  #- ps: Start-FileDownload 'https://www.libsdl.org/release/SDL2-2.0.5.zip' -FileName 'SDL2-2.0.5.zip'
+  #- 7z x SDL2-2.0.5.zip -oc:\src\lib > NUL
   # Install FreeImage
-  - ps: Start-FileDownload 'http://downloads.sourceforge.net/freeimage/FreeImage3170.zip' -FileName 'FreeImage3170.zip'
-  - 7z x FreeImage3170.zip -oc:\src\lib > NUL
-  - ps: (Get-Content C:\src\lib\FreeImage\Source\LibTIFF4\tif_config.h).replace('#define snprintf _snprintf', '') | Set-Content C:\src\lib\FreeImage\Source\LibTIFF4\tif_config.h
+  #- ps: Start-FileDownload 'http://downloads.sourceforge.net/freeimage/FreeImage3170.zip' -FileName 'FreeImage3170.zip'
+  #- 7z x FreeImage3170.zip -oc:\src\lib > NUL
+  #- ps: (Get-Content C:\src\lib\FreeImage\Source\LibTIFF4\tif_config.h).replace('#define snprintf _snprintf', '') | Set-Content C:\src\lib\FreeImage\Source\LibTIFF4\tif_config.h
     
   # Install FreeType
-  - ps: Start-FileDownload 'http://download.savannah.gnu.org/releases/freetype/freetype-2.7.tar.gz' -FileName 'freetype-2.7.tar.gz'
-  - 7z x freetype-2.7.tar.gz > NUL
-  - 7z x freetype-2.7.tar -oc:\src\lib > NUL
+  #- ps: Start-FileDownload 'http://download.savannah.gnu.org/releases/freetype/freetype-2.7.tar.gz' -FileName 'freetype-2.7.tar.gz'
+  #- 7z x freetype-2.7.tar.gz > NUL
+  #- 7z x freetype-2.7.tar -oc:\src\lib > NUL
   # Install curl
-  - ps: Start-FileDownload 'https://curl.haxx.se/download/curl-7.50.3.zip' -FileName 'curl-7.50.3.zip'
-  - 7z x curl-7.50.3.zip -oc:\src\lib > NUL
+  #- ps: Start-FileDownload 'https://curl.haxx.se/download/curl-7.50.3.zip' -FileName 'curl-7.50.3.zip'
+  #- 7z x curl-7.50.3.zip -oc:\src\lib > NUL
   # Install vlc
-  - ps: Start-FileDownload 'https://github.com/RSATom/libvlc-sdk/archive/64ca3daa475a6539073f7544c740725b818642b2.zip' -FileName 'vlc-2.2.2.zip'
-  - 7z x vlc-2.2.2.zip -oc:\src\lib\ > NUL
-  - ps: Start-FileDownload 'http://download.videolan.org/pub/videolan/vlc/2.2.2/win32/vlc-2.2.2-win32.zip' -FileName 'vlc-2.2.2-win32.zip'
-  - 7z x vlc-2.2.2-win32.zip -oc:\src\downloads
+  #- ps: Start-FileDownload 'https://github.com/RSATom/libvlc-sdk/archive/64ca3daa475a6539073f7544c740725b818642b2.zip' -FileName 'vlc-2.2.2.zip'
+  #- 7z x vlc-2.2.2.zip -oc:\src\lib\ > NUL
+  #- ps: Start-FileDownload 'http://download.videolan.org/pub/videolan/vlc/2.2.2/win32/vlc-2.2.2-win32.zip' -FileName 'vlc-2.2.2-win32.zip'
+  #- 7z x vlc-2.2.2-win32.zip -oc:\src\downloads
   
   # Fix directories
   - cd c:\src\lib
-  - rename libvlc-sdk-64ca3daa475a6539073f7544c740725b818642b2 libvlc-2.2.2
-  - rename eigen-eigen-b9cd8366d4e8 eigen
+  #- rename libvlc-sdk-64ca3daa475a6539073f7544c740725b818642b2 libvlc-2.2.2
+  #- rename eigen-eigen-b9cd8366d4e8 eigen
   
 build_script:
-  - cd c:\src\lib\freetype-2.7\builds\windows\vc2010
-  - '"C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\devenv.com"  freetype.sln /upgrade'
-  - msbuild freetype.sln /p:Configuration=Release /p:Platform="Win32"
+  #- cd c:\src\lib\freetype-2.7\builds\windows\vc2010
+  #- '"C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\devenv.com"  freetype.sln /upgrade'
+  #- msbuild freetype.sln /p:Configuration=Release /p:Platform="Win32"
     
-  - cd c:\src\lib\FreeImage
-  - '"C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\devenv.com"  FreeImage.2013.sln /upgrade'
-  - msbuild FreeImage.2013.sln /p:Configuration=Release /p:Platform="Win32"
+  #- cd c:\src\lib\FreeImage
+  #- '"C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\devenv.com"  FreeImage.2013.sln /upgrade'
+  #- msbuild FreeImage.2013.sln /p:Configuration=Release /p:Platform="Win32"
   
-  - cd c:\src\lib\curl-7.50.3\winbuild
+  #- cd c:\src\lib\curl-7.50.3\winbuild
   # Run this to enable nmake
-  - '"C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x86'
-  - nmake /f Makefile.vc mode=dll VC=14 DEBUG=yes
-  - nmake /f Makefile.vc mode=dll VC=14 DEBUG=no
+  #- '"C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x86'
+  #- nmake /f Makefile.vc mode=dll VC=14 DEBUG=yes
+  #- nmake /f Makefile.vc mode=dll VC=14 DEBUG=no
   
-  - cd c:\src\lib\SDL2-2.0.5
-  - mkdir build
-  - cd build
-  - cmake -G "Visual Studio 14 2015" ..
-  - cd c:\src\lib\SDL2-2.0.5\build
-  - '"C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild" SDL2.sln /p:Configuration=Release /p:Platform="Win32"'
+  #- cd c:\src\lib\SDL2-2.0.5
+  #- mkdir build
+  #- cd build
+  #- cmake -G "Visual Studio 14 2015" ..
+  #- cd c:\src\lib\SDL2-2.0.5\build
+  #- '"C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild" SDL2.sln /p:Configuration=Release /p:Platform="Win32"'
   
   - cd c:\src\EmulationStation
   - mkdir build
