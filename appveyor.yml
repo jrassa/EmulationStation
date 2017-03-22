@@ -90,16 +90,14 @@ build_script:
   - '"C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild" emulationstation-all.sln /p:Configuration=Release /p:Platform="Win32"'
 
   - cd c:\src\EmulationStation
-  - 7z a EmulationStation.zip C:\src\EmulationStation\Release\*.exe
-  - 7z a EmulationStation.zip C:\src\EmulationStation\Release\*.exp
-  - 7z a EmulationStation.zip C:\src\EmulationStation\Release\*.lib
-  - 7z a EmulationStation.zip C:\src\downloads\vlc-2.2.2\libvlc.dll
-  - 7z a EmulationStation.zip C:\Libraries\boost_1_62_0\lib64-msvc-14.0\boost_filesystem-vc140-mt-1_62.dll
-  - 7z a EmulationStation.zip C:\Libraries\boost_1_62_0\lib64-msvc-14.0\boost_locale-vc140-mt-1_62.dll
-  - 7z a EmulationStation.zip C:\Libraries\boost_1_62_0\lib64-msvc-14.0\boost_system-vc140-mt-1_62.dll
+  - 7z a EmulationStation.zip C:\src\EmulationStation\Release\*.exe C:\src\EmulationStation\Release\*.exp C:\src\EmulationStation\Release\*.lib
+  - 7z a EmulationStation.zip C:\src\downloads\vlc-2.2.2\libvlc.dll C:\src\downloads\vlc-2.2.2\libvlccore.dll
+  - 7z a EmulationStation.zip C:\Libraries\boost_1_62_0\lib32-msvc-14.0\boost_filesystem-vc140-mt-1_62.dll
+  - 7z a EmulationStation.zip C:\Libraries\boost_1_62_0\lib32-msvc-14.0\boost_locale-vc140-mt-1_62.dll
+  - 7z a EmulationStation.zip C:\Libraries\boost_1_62_0\lib32-msvc-14.0\boost_system-vc140-mt-1_62.dll
 
-on_finish:
- - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+#on_finish:
+ #- ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
   
 #platform:
