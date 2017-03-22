@@ -50,8 +50,8 @@ install:
   # Install vlc
   #- ps: Start-FileDownload 'https://github.com/RSATom/libvlc-sdk/archive/64ca3daa475a6539073f7544c740725b818642b2.zip' -FileName 'vlc-2.2.2.zip'
   #- 7z x vlc-2.2.2.zip -oc:\src\lib\ > NUL
-  #- ps: Start-FileDownload 'http://download.videolan.org/pub/videolan/vlc/2.2.2/win32/vlc-2.2.2-win32.zip' -FileName 'vlc-2.2.2-win32.zip'
-  #- 7z x vlc-2.2.2-win32.zip -oc:\src\downloads
+  - ps: Start-FileDownload 'http://download.videolan.org/pub/videolan/vlc/2.2.2/win32/vlc-2.2.2-win32.zip' -FileName 'vlc-2.2.2-win32.zip'
+  - 7z x vlc-2.2.2-win32.zip -oc:\src\downloads
   
   # Fix directories
   - cd c:\src\lib
@@ -98,8 +98,8 @@ build_script:
   - 7z a EmulationStation.zip C:\Libraries\boost_1_62_0\lib64-msvc-14.0\boost_locale-vc140-mt-1_62.dll
   - 7z a EmulationStation.zip C:\Libraries\boost_1_62_0\lib64-msvc-14.0\boost_system-vc140-mt-1_62.dll
 
-on_finish:
- - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+#on_finish:
+ #- ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
   
 #platform:
