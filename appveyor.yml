@@ -98,8 +98,8 @@ build_script:
   - 7z a EmulationStation.zip C:\Libraries\boost_1_62_0\lib64-msvc-14.0\boost_locale-vc140-mt-1_62.dll
   - 7z a EmulationStation.zip C:\Libraries\boost_1_62_0\lib64-msvc-14.0\boost_system-vc140-mt-1_62.dll
 
-#on_finish:
- #- ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+on_finish:
+ - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
   
 #platform:
