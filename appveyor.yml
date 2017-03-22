@@ -28,7 +28,7 @@ install:
   - mkdir c:\src\lib
   - cd c:\src\downloads
   #- ps: Start-FileDownload 'https://drive.google.com/a/rassaonline.net/uc?export=download&confirm=tEf4&id=0B7goJ1BBoiPOZ2s4MFBwbzBkd0k' -FileName 'emulationstation-dependencies.zip'
-  - '"C:\Program Files\Git\mingw64\bin\curl" -fsS -o emulationstation-dependencies.zip https://drive.google.com/a/rassaonline.net/uc?export=download&confirm=tEf4&id=0B7goJ1BBoiPOZ2s4MFBwbzBkd0k'
+  - '"C:\Program Files\Git\mingw64\bin\curl" -fsS -o emulationstation-dependencies.zip https://drive.google.com/uc?export=download&confirm=Nbza&id=0B7goJ1BBoiPOZ2s4MFBwbzBkd0k'
   - 7z x emulationstation-dependencies.zip -oC:\src\lib > NUL
   # Install Eigen
   #- ps: Start-FileDownload 'http://bitbucket.org/eigen/eigen/get/3.2.10.zip' -FileName 'eigen-3.2.10.zip'
