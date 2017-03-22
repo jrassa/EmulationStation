@@ -28,7 +28,7 @@ install:
   - mkdir c:\src\lib
   - cd c:\src\downloads
   #- ps: Start-FileDownload 'https://drive.google.com/a/rassaonline.net/uc?export=download&confirm=tEf4&id=0B7goJ1BBoiPOZ2s4MFBwbzBkd0k' -FileName 'emulationstation-dependencies.zip'
-  - '"C:\Program Files\Git\mingw64\bin\curl" -fsS -o emulationstation-dependencies.zip https://drive.google.com/uc?export=download&confirm=Nbza&id=0B7goJ1BBoiPOZ2s4MFBwbzBkd0k'
+  - '"C:\Program Files\Git\mingw64\bin\curl" -fsS -o emulationstation-dependencies.zip https://www.dropbox.com/s/0ab2zf0oe7i16i7/emulationstation-dependencies.zip?dl=1'
   - 7z x emulationstation-dependencies.zip -oC:\src\lib > NUL
   # Install Eigen
   #- ps: Start-FileDownload 'http://bitbucket.org/eigen/eigen/get/3.2.10.zip' -FileName 'eigen-3.2.10.zip'
@@ -99,8 +99,8 @@ build_script:
   - 7z a EmulationStation.zip C:\Libraries\boost_1_62_0\lib64-msvc-14.0\boost_locale-vc140-mt-1_62.dll
   - 7z a EmulationStation.zip C:\Libraries\boost_1_62_0\lib64-msvc-14.0\boost_system-vc140-mt-1_62.dll
 
-on_finish:
- - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+#on_finish:
+ #- ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
   
 #platform:
