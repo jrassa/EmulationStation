@@ -131,7 +131,6 @@ void VideoComponent::setImage(std::string path)
 		return;
 
 	mStaticImage.setImage(path);
-	mStaticImage.resize();
 	mFadeIn = 0.0f;
 	mStaticImagePath = path;
 }
