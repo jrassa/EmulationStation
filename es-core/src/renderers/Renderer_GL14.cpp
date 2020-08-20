@@ -172,7 +172,7 @@ namespace Renderer
 
 	} // bindTexture
 
-	void setMagFilterTexture(const bool _linearMag)
+	void setMagFilter(const bool _linearMag)
 	{
 		GL_CHECK_ERROR(glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, _linearMag ? GL_LINEAR : GL_NEAREST));
 	} // change mag filter for currently bound texture
