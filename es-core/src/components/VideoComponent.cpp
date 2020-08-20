@@ -67,7 +67,8 @@ VideoComponent::VideoComponent(Window* window) :
 	// Setup the default configuration
 	mConfig.showSnapshotDelay 		= false;
 	mConfig.showSnapshotNoVideo		= false;
-	mConfig.startDelay				= 0;
+	mConfig.startDelay			= 0;
+	mConfig.magFilterLinear 		= false;	
 	if (mWindow->getGuiStackSize() > 1) {
 		topWindow(false);
 	}
@@ -207,6 +208,9 @@ void VideoComponent::applyTheme(const std::shared_ptr<ThemeData>& theme, const s
 
 	if (elem->has("showSnapshotDelay"))
 		mConfig.showSnapshotDelay = elem->get<bool>("showSnapshotDelay");
+
+	if (elem->has("magFilterLinear"))
+		mConfig.magFilterLinear = elem->get<bool>("magFilterLinear");
 }
 
 std::vector<HelpPrompt> VideoComponent::getHelpPrompts()
