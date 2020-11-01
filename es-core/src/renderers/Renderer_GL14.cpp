@@ -172,6 +172,11 @@ namespace Renderer
 
 	} // bindTexture
 
+	void setMagFilter(const bool _linearMag)
+	{
+		GL_CHECK_ERROR(glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, _linearMag ? GL_LINEAR : GL_NEAREST));
+	} // change mag filter for currently bound texture
+
 	void drawLines(const Vertex* _vertices, const unsigned int _numVertices, const Blend::Factor _srcBlendFactor, const Blend::Factor _dstBlendFactor)
 	{
 		GL_CHECK_ERROR(glVertexPointer(  2, GL_FLOAT,         sizeof(Vertex), &_vertices[0].pos));

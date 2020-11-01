@@ -157,7 +157,8 @@ void VideoVlcComponent::render(const Transform4x4f& parentTrans)
 		// Build a texture for the video frame
 		mTexture->initFromPixels((unsigned char*)mContext.surface->pixels, mContext.surface->w, mContext.surface->h);
 		mTexture->bind();
-
+		Renderer::setMagFilter(mConfig.magFilterLinear);
+		
 		// Render it
 		Renderer::drawTriangleStrips(&vertices[0], 4);
 	}
