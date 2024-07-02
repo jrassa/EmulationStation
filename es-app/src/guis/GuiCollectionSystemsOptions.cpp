@@ -1,7 +1,10 @@
+#include <fstream>
+
 #include "guis/GuiCollectionSystemsOptions.h"
 
 #include "components/OptionListComponent.h"
 #include "components/SwitchComponent.h"
+#include "guis/GuiInfoPopup.h"
 #include "guis/GuiRandomCollectionOptions.h"
 #include "guis/GuiSettings.h"
 #include "guis/GuiTextEditPopup.h"
@@ -25,49 +28,58 @@ void GuiCollectionSystemsOptions::initializeMenu()
 	// manage random collection
 	addEntry("RANDOM GAME COLLECTION SETTINGS", 0x777777FF, true, [this] { openRandomCollectionSettings(); });
 
-	// add "Create New Custom Collection from Theme"
-	std::vector<std::string> unusedFolders = CollectionSystemManager::get()->getUnusedSystemsFromTheme();
-	if (unusedFolders.size() > 0)
-	{
-		addEntry("CREATE NEW CUSTOM COLLECTION FROM THEME", 0x777777FF, true,
-		[this, unusedFolders] {
-			auto s = new GuiSettings(mWindow, "SELECT THEME FOLDER");
-			std::shared_ptr< OptionListComponent<std::string> > folderThemes = std::make_shared< OptionListComponent<std::string> >(mWindow, "SELECT THEME FOLDER", true);
-
-			// add Custom Systems
-			for(auto it = unusedFolders.cbegin() ; it != unusedFolders.cend() ; it++ )
-			{
-				ComponentListRow row;
-				std::string name = *it;
-
-				std::function<void()> createCollectionCall = [name, this, s] {
-					createCollection(name);
-				};
-				row.makeAcceptInputHandler(createCollectionCall);
-
-				auto themeFolder = std::make_shared<TextComponent>(mWindow, Utils::String::toUpper(name), Font::get(FONT_SIZE_SMALL), 0x777777FF);
-				row.addElement(themeFolder, true);
-				s->addRow(row);
-			}
-			mWindow->pushGui(s);
-		});
-	}
 
 	ComponentListRow row;
-	row.addElement(std::make_shared<TextComponent>(mWindow, "CREATE NEW CUSTOM COLLECTION", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
-	auto createCustomCollection = [this](const std::string& newVal) {
-		std::string name = newVal;
-		// we need to store the first Gui and remove it, as it'll be deleted by the actual Gui
-		Window* window = mWindow;
-		GuiComponent* topGui = window->peekGui();
-		window->removeGui(topGui);
-		createCollection(name);
-	};
-	row.makeAcceptInputHandler([this, createCustomCollection] {
-		mWindow->pushGui(new GuiTextEditPopup(mWindow, "New Collection Name", "", createCustomCollection, false));
-	});
+	if(CollectionSystemManager::get()->isEditing())
+	{
+		row.addElement(std::make_shared<TextComponent>(mWindow, "FINISH EDITING '" + Utils::String::toUpper(CollectionSystemManager::get()->getEditingCollection()) + "' COLLECTION", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
+		row.makeAcceptInputHandler(std::bind(&GuiCollectionSystemsOptions::exitEditMode, this));
+		mMenu.addRow(row);
+	}
+	else
+	{
+		// add "Create New Custom Collection from Theme"
+		std::vector<std::string> unusedFolders = CollectionSystemManager::get()->getUnusedSystemsFromTheme();
+		if (unusedFolders.size() > 0)
+		{
+			addEntry("CREATE NEW CUSTOM COLLECTION FROM THEME", 0x777777FF, true,
+			[this, unusedFolders] {
+				auto s = new GuiSettings(mWindow, "SELECT THEME FOLDER");
+				std::shared_ptr< OptionListComponent<std::string> > folderThemes = std::make_shared< OptionListComponent<std::string> >(mWindow, "SELECT THEME FOLDER", true);
 
-	mMenu.addRow(row);
+				// add Custom Systems
+				for(auto it = unusedFolders.cbegin() ; it != unusedFolders.cend() ; it++ )
+				{
+					ComponentListRow row;
+					std::string name = *it;
+
+					std::function<void()> createCollectionCall = [name, this, s] {
+						createCollection(name);
+					};
+					row.makeAcceptInputHandler(createCollectionCall);
+
+					auto themeFolder = std::make_shared<TextComponent>(mWindow, Utils::String::toUpper(name), Font::get(FONT_SIZE_SMALL), 0x777777FF);
+					row.addElement(themeFolder, true);
+					s->addRow(row);
+				}
+				mWindow->pushGui(s);
+			});
+		}
+
+		row.addElement(std::make_shared<TextComponent>(mWindow, "CREATE NEW CUSTOM COLLECTION", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
+		auto createCustomCollection = [this](const std::string& newVal) {
+			std::string name = newVal;
+			// we need to store the first Gui and remove it, as it'll be deleted by the actual Gui
+			Window* window = mWindow;
+			GuiComponent* topGui = window->peekGui();
+			window->removeGui(topGui);
+			createCollection(name);
+		};
+		row.makeAcceptInputHandler([this, createCustomCollection] {
+			mWindow->pushGui(new GuiTextEditPopup(mWindow, "New Collection Name", "", createCustomCollection, false));
+		});
+		mMenu.addRow(row);
+	}
 
 	bundleCustomCollections = std::make_shared<SwitchComponent>(mWindow);
 	bundleCustomCollections->setState(Settings::getInstance()->getBool("UseCustomCollectionsSystem"));
@@ -103,14 +115,6 @@ void GuiCollectionSystemsOptions::initializeMenu()
 
 	mMenu.addWithLabel("ADD/REMOVE GAMES WHILE SCREENSAVER TO", defaultScreenSaverCollection);
 
-	if(CollectionSystemManager::get()->isEditing())
-	{
-		row.elements.clear();
-		row.addElement(std::make_shared<TextComponent>(mWindow, "FINISH EDITING '" + Utils::String::toUpper(CollectionSystemManager::get()->getEditingCollection()) + "' COLLECTION", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
-		row.makeAcceptInputHandler(std::bind(&GuiCollectionSystemsOptions::exitEditMode, this));
-		mMenu.addRow(row);
-	}
-
 	mMenu.addButton("BACK", "back", std::bind(&GuiCollectionSystemsOptions::applySettings, this));
 
 	mMenu.setPosition((Renderer::getScreenWidth() - mMenu.getSize().x()) / 2, Renderer::getScreenHeight() * 0.15f);
@@ -137,8 +141,15 @@ void GuiCollectionSystemsOptions::addEntry(const char* name, unsigned int color,
 
 void GuiCollectionSystemsOptions::createCollection(std::string inName)
 {
-	std::string name = CollectionSystemManager::get()->getValidNewCollectionName(inName);
-	SystemData* newSys = CollectionSystemManager::get()->addNewCustomCollection(name);
+	CollectionSystemManager* collSysMgr = CollectionSystemManager::get();
+	std::string name = collSysMgr->getValidNewCollectionName(inName);
+
+	SystemData* newSys = collSysMgr->addNewCustomCollection(name, true);
+	if (!collSysMgr->saveCustomCollection(newSys)) {
+		GuiInfoPopup* s = new GuiInfoPopup(mWindow, "Failed creating '" + Utils::String::toUpper(name) + "' Collection. See log for details.", 8000);
+		mWindow->setInfoPopup(s);
+		return;
+	}
 	customOptionList->add(name, name, true);
 	std::string outAuto = Utils::String::vectorToDelimitedString(autoOptionList->getSelectedObjects(), ",");
 	std::string outCustom = Utils::String::vectorToDelimitedString(customOptionList->getSelectedObjects(), ",");
@@ -146,10 +157,9 @@ void GuiCollectionSystemsOptions::createCollection(std::string inName)
 	ViewController::get()->goToSystemView(newSys);
 
 	Window* window = mWindow;
-	CollectionSystemManager::get()->setEditMode(name);
+	collSysMgr->setEditMode(name);
 	while(window->peekGui() && window->peekGui() != ViewController::get())
 		delete window->peekGui();
-	return;
 }
 
 void GuiCollectionSystemsOptions::openRandomCollectionSettings()

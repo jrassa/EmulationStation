@@ -30,6 +30,24 @@ enum CollectionSystemType
 	CUSTOM_COLLECTION
 };
 
+// Flags when loading or creating a collection
+enum class CollectionFlags : uint8_t
+{
+	NONE,        // create only
+	HOLD_IN_MAP, // create and keep in mAutoCollectionSystemsData or mCustomCollectionSystemsData
+	NEEDS_SAVE   // force save of newly added collection
+};
+
+constexpr CollectionFlags operator|(CollectionFlags a,CollectionFlags b)
+{
+    return static_cast<CollectionFlags>(static_cast<uint8_t>(a) | static_cast<uint8_t>(b));
+}
+
+constexpr CollectionFlags operator&(CollectionFlags a, CollectionFlags b)
+{
+    return static_cast<CollectionFlags>(static_cast<uint8_t>(a) & static_cast<uint8_t>(b));
+}
+
 struct CollectionSystemDecl
 {
 	CollectionSystemType type; // type of system
@@ -58,7 +76,7 @@ public:
 	static CollectionSystemManager* get();
 	static void init(Window* window);
 	static void deinit();
-	void saveCustomCollection(SystemData* sys);
+	bool saveCustomCollection(SystemData* sys);
 
 	void loadCollectionSystems(bool async=false);
 	void loadEnabledListFromSettings();
@@ -74,7 +92,7 @@ public:
 	inline SystemData* getCustomCollectionsBundle() { return mCustomCollectionsBundle; };
 	inline SystemData* getRandomCollection() { return mRandomCollection; };
 	std::vector<std::string> getUnusedSystemsFromTheme();
-	SystemData* addNewCustomCollection(std::string name);
+	SystemData* addNewCustomCollection(std::string name, bool needsSave = false);
 
 	bool isThemeGenericCollectionCompatible(bool genericCustomCollections);
 	bool isThemeCustomCollectionCompatible(std::vector<std::string> stringVector);
@@ -107,7 +125,7 @@ private:
 
 	void initAutoCollectionSystems();
 	void initCustomCollectionSystems();
-	SystemData* createNewCollectionEntry(std::string name, CollectionSystemDecl sysDecl, bool index = true);
+	SystemData* createNewCollectionEntry(std::string name, CollectionSystemDecl sysDecl, const CollectionFlags flags);
 	void populateAutoCollection(CollectionSystemData* sysData);
 	void populateCustomCollection(CollectionSystemData* sysData);
 	void addRandomGames(SystemData* newSys, SystemData* sourceSystem, FileData* rootFolder, FileFilterIndex* index,

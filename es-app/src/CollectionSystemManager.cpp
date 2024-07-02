@@ -15,6 +15,7 @@
 #include "ThemeData.h"
 #include <pugixml.hpp>
 #include <fstream>
+#include <cstring>
 
 /* Handling the getting, initialization, deinitialization, saving and deletion of
  * a CollectionSystemManager Instance */
@@ -97,29 +98,37 @@ void CollectionSystemManager::deinit()
 	}
 }
 
-void CollectionSystemManager::saveCustomCollection(SystemData* sys)
+bool CollectionSystemManager::saveCustomCollection(SystemData* sys)
 {
 	std::string name = sys->getName();
 	std::unordered_map<std::string, FileData*> games = sys->getRootFolder()->getChildrenByFilename();
 	bool found = mCustomCollectionSystemsData.find(name) != mCustomCollectionSystemsData.cend();
-	if (found) {
-		CollectionSystemData sysData = mCustomCollectionSystemsData.at(name);
-		if (sysData.needsSave)
-		{
-			std::ofstream configFile;
-			configFile.open(getCustomCollectionConfigPath(name));
-			for(std::unordered_map<std::string, FileData*>::const_iterator iter = games.cbegin(); iter != games.cend(); ++iter)
-			{
-				std::string path =  iter->first;
-				configFile << path << std::endl;
-			}
-			configFile.close();
-		}
-	}
-	else
+	if (!found)
 	{
 		LOG(LogError) << "Couldn't find collection to save! " << name;
+		return false;
 	}
+
+	CollectionSystemData sysData = mCustomCollectionSystemsData.at(name);
+	if (sysData.needsSave)
+	{
+		std::string absCollectionFn = getCustomCollectionConfigPath(name);
+		std::ofstream configFile;
+		configFile.open(absCollectionFn);
+		if (!configFile.good())
+		{
+			auto const errNo = errno;
+			LOG(LogError) << "Failed to create file, collection not created: " << absCollectionFn << ": " <<  std::strerror(errNo) << " (" << errNo <<  ")";
+			return false;
+		}
+		for(std::unordered_map<std::string, FileData*>::const_iterator iter = games.cbegin(); iter != games.cend(); ++iter)
+		{
+			std::string path =  iter->first;
+			configFile << path << std::endl;
+		}
+		configFile.close();
+	}
+	return true;
 }
 
 /* Methods to load all Collections into memory, and handle enabling the active ones */
@@ -128,7 +137,7 @@ void CollectionSystemManager::loadCollectionSystems(bool async)
 {
 	initAutoCollectionSystems();
 	CollectionSystemDecl decl = mCollectionSystemDeclsIndex[CUSTOM_COLL_ID];
-	mCustomCollectionsBundle = createNewCollectionEntry(decl.name, decl, false);
+	mCustomCollectionsBundle = createNewCollectionEntry(decl.name, decl, CollectionFlags::NONE);
 	// we will also load custom systems here
 	initCustomCollectionSystems();
 	if(Settings::getInstance()->getString("CollectionSystemsAuto") != "" || Settings::getInstance()->getString("CollectionSystemsCustom") != "")
@@ -375,6 +384,7 @@ bool CollectionSystemManager::isThemeCustomCollectionCompatible(std::vector<std:
 std::string CollectionSystemManager::getValidNewCollectionName(std::string inName, int index)
 {
 	std::string name = inName;
+	const std::string infix = " (" + std::to_string(index) + ")";
 
 	if(index == 0)
 	{
@@ -388,7 +398,7 @@ std::string CollectionSystemManager::getValidNewCollectionName(std::string inNam
 	}
 	else
 	{
-		name += " (" + std::to_string(index) + ")";
+		name += infix;
 	}
 
 	if(name == "")
@@ -398,7 +408,7 @@ std::string CollectionSystemManager::getValidNewCollectionName(std::string inNam
 
 	if(name != inName)
 	{
-		LOG(LogInfo) << "Had to change name, from: " << inName << " to: " << name;
+		LOG(LogInfo) << "Name collision, had to change name from: " << inName << " to: " << name;
 	}
 
 	// get used systems in es_systems.cfg
@@ -418,7 +428,7 @@ std::string CollectionSystemManager::getValidNewCollectionName(std::string inNam
 		if (*sysIt == name)
 		{
 			if(index > 0) {
-				name = name.substr(0, name.size()-4);
+				name = name.substr(0, name.size() - infix.size());
 			}
 			return getValidNewCollectionName(name, index+1);
 		}
@@ -448,7 +458,7 @@ void CollectionSystemManager::setEditMode(std::string collectionName, bool quiet
 	mEditingCollectionSystemData = sysData;
 
 	if (!quiet) {
-		GuiInfoPopup* s = new GuiInfoPopup(mWindow, "Editing the '" + Utils::String::toUpper(collectionName) + "' Collection. Add/remove games with Y.", 10000);
+		GuiInfoPopup* s = new GuiInfoPopup(mWindow, "Editing the '" + Utils::String::toUpper(collectionName) + "' Collection. Add/remove games with Y.", 8000);
 		mWindow->setInfoPopup(s);
 	}
 }
@@ -456,14 +466,14 @@ void CollectionSystemManager::setEditMode(std::string collectionName, bool quiet
 void CollectionSystemManager::exitEditMode(bool quiet)
 {
 	if (!quiet) {
-		GuiInfoPopup* s = new GuiInfoPopup(mWindow, "Finished editing the '" + mEditingCollection + "' Collection.", 4000);
+		GuiInfoPopup* s = new GuiInfoPopup(mWindow, "Finished editing the '" +  Utils::String::toUpper(mEditingCollection) + "' Collection.", 4000);
 		mWindow->setInfoPopup(s);
 	}
 	if (mIsEditingCustom) {
 		mIsEditingCustom = false;
 		mEditingCollection = "Favorites";
-
 		mEditingCollectionSystemData->system->onMetaDataSavePoint();
+		saveCustomCollection(mEditingCollectionSystemData->system);
 	}
 }
 
@@ -656,7 +666,7 @@ void CollectionSystemManager::initAutoCollectionSystems()
 		CollectionSystemDecl sysDecl = it->second;
 		if (!sysDecl.isCustom)
 		{
-			SystemData* newCol = createNewCollectionEntry(sysDecl.name, sysDecl);
+			SystemData* newCol = createNewCollectionEntry(sysDecl.name, sysDecl, CollectionFlags::HOLD_IN_MAP);
 			if (sysDecl.type == AUTO_RANDOM)
 				mRandomCollection = newCol;
 		}
@@ -756,17 +766,20 @@ SystemData* CollectionSystemManager::getAllGamesCollection()
 	return allSysData->system;
 }
 
-SystemData* CollectionSystemManager::addNewCustomCollection(std::string name)
+SystemData* CollectionSystemManager::addNewCustomCollection(std::string name, bool needsSave)
 {
 	CollectionSystemDecl decl = mCollectionSystemDeclsIndex[CUSTOM_COLL_ID];
 	decl.themeFolder = name;
 	decl.name = name;
 	decl.longName = name;
-	return createNewCollectionEntry(name, decl);
+	CollectionFlags flags = CollectionFlags::HOLD_IN_MAP;
+	if (needsSave)
+		flags = flags | CollectionFlags::NEEDS_SAVE;
+	return createNewCollectionEntry(name, decl, flags);
 }
 
 // creates a new, empty Collection system, based on the name and declaration
-SystemData* CollectionSystemManager::createNewCollectionEntry(std::string name, CollectionSystemDecl sysDecl, bool index)
+SystemData* CollectionSystemManager::createNewCollectionEntry(std::string name, CollectionSystemDecl sysDecl, const CollectionFlags flags)
 {
 	SystemData* newSys = new SystemData(name, sysDecl.longName, mCollectionEnvData, sysDecl.themeFolder, true);
 
@@ -775,9 +788,9 @@ SystemData* CollectionSystemManager::createNewCollectionEntry(std::string name, 
 	newCollectionData.decl = sysDecl;
 	newCollectionData.isEnabled = false;
 	newCollectionData.isPopulated = false;
-	newCollectionData.needsSave = false;
+	newCollectionData.needsSave = (flags & CollectionFlags::NEEDS_SAVE) == CollectionFlags::NEEDS_SAVE ? true : false;
 
-	if (index)
+	if ((flags & CollectionFlags::HOLD_IN_MAP) == CollectionFlags::HOLD_IN_MAP)
 	{
 		if (!sysDecl.isCustom)
 		{
