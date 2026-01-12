@@ -1,4 +1,4 @@
-<!-- Generated on 2026-01-12, from MAME 0.284 (arcade).dat, fbneo.dat, mame2003-plus.xml -->
+<!-- Generated on 2025-03-10, from MAME 0.275 (arcade).dat, fbneo.dat, mame2003-plus.xml -->
 <bios>3dobios</bios>
 <bios>acpsx</bios>
 <bios>airlbios</bios>
@@ -82,7 +82,6 @@
 <bios>sys246</bios>
 <bios>sys256</bios>
 <bios>sys573</bios>
-<bios>systemy2</bios>
 <bios>taitofx1</bios>
 <bios>taitotz</bios>
 <bios>tourvis</bios>
