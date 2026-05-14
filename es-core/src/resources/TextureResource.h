@@ -39,6 +39,10 @@ public:
 	static size_t getTotalMemUsage(); // returns an approximation of total VRAM used by textures (in bytes)
 	static size_t getTotalTextureSize(); // returns the number of bytes that would be used if all textures were in memory
 
+	// Advance the per-frame counter the texture cache uses to protect
+	// recently-rendered textures from eviction. Called by Window::render().
+	static void nextBindGeneration() { sTextureDataManager.nextBindGeneration(); }
+
 protected:
 	TextureResource(const std::string& path, bool tile, bool dynamic, bool block = true);
 	virtual bool unload();

@@ -81,6 +81,10 @@ bool TextureDataManager::bind(const TextureResource* key)
 		bound = tex->uploadAndBind();
 	if (!bound)
 		mBlank->uploadAndBind();
+	else
+		// Stamp this texture as bound this generation so the eviction loop in
+		// load() won't kick it out and cause it to flicker on the next frame.
+		tex->setBindGeneration(mBindGeneration);
 	return bound;
 }
 
@@ -121,6 +125,13 @@ void TextureDataManager::load(std::shared_ptr<TextureData> tex, bool block)
 	// if max_texture is 0, then texture memory should be considered unlimited
 	if (max_texture > 0)
 	{
+		// Two-pass eviction. Pass 1 protects textures that were rendered in the
+		// current or previous bind generation — evicting them would cause flickering
+		// since they will be re-bound (and immediately re-loaded) on the very next
+		// frame.  Pass 2 is a fallback that ignores the protection if we still don't
+		// have enough budget after pass 1, so we never deadlock if the on-screen
+		// working set genuinely exceeds MaxVRAM.
+		const uint64_t protectGen = mBindGeneration > 0 ? mBindGeneration - 1 : 0;
 		size_t size = TextureResource::getTotalMemUsage();
 		for (auto it = mTextures.crbegin(); it != mTextures.crend(); ++it)
 		{
@@ -133,9 +144,27 @@ void TextureDataManager::load(std::shared_ptr<TextureData> tex, bool block)
 			// evict→cancel→re-queue→evict cascade that causes non-stop texture flickering.
 			if ((*it)->loadStatus() != TextureData::LoadStatus::LOADED)
 				continue;
+			if ((*it)->bindGeneration() >= protectGen)
+				continue;
 			(*it)->releaseVRAM();
 			(*it)->releaseRAM();
 			size = TextureResource::getTotalMemUsage();
+		}
+		// Pass 2: if still over budget, evict on-screen textures too. Rare (only
+		// when the working set itself is bigger than MaxVRAM), but necessary to
+		// avoid runaway memory growth.
+		if (size >= max_texture)
+		{
+			for (auto it = mTextures.crbegin(); it != mTextures.crend(); ++it)
+			{
+				if (size < max_texture)
+					break;
+				if ((*it)->loadStatus() != TextureData::LoadStatus::LOADED)
+					continue;
+				(*it)->releaseVRAM();
+				(*it)->releaseRAM();
+				size = TextureResource::getTotalMemUsage();
+			}
 		}
 	}
 	if (!block)
