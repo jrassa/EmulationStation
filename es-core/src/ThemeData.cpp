@@ -92,6 +92,8 @@ std::map<std::string, std::map<std::string, ThemeData::ElementPropertyType>> The
 		{ "horizontalMargin", RESOLUTION_FLOAT },
 		{ "forceUppercase", BOOLEAN },
 		{ "lineSpacing", FLOAT },
+		{ "favoriteIconPath", PATH },
+		{ "favoriteIconColor", COLOR },
 		{ "zIndex", FLOAT } } },
 	{ "container", {
 		{ "pos", RESOLUTION_PAIR },
@@ -515,7 +517,9 @@ void ThemeData::parseElement(const pugi::xml_node& root, const std::map<std::str
 			break;
 		case PATH:
 		{
-			std::string path = Utils::FileSystem::resolveRelativePath(str, mPaths.back(), true, false);
+			std::string path = (str.size() >= 2 && str[0] == ':' && str[1] == '/')
+				? str
+				: Utils::FileSystem::resolveRelativePath(str, mPaths.back(), true, false);
 			if(!ResourceManager::getInstance()->fileExists(path))
 			{
 				std::stringstream ss;
@@ -558,6 +562,14 @@ bool ThemeData::hasView(const std::string& view)
 {
 	auto viewIt = mViews.find(view);
 	return (viewIt != mViews.cend());
+}
+
+std::string ThemeData::getVariable(const std::string& name) const
+{
+	auto it = mVariables.find(name);
+	if (it != mVariables.cend())
+		return it->second;
+	return "";
 }
 
 const ThemeData::ThemeElement* ThemeData::getElement(const std::string& view, const std::string& element, const std::string& expectedType) const

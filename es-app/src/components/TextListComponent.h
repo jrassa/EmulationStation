@@ -60,6 +60,7 @@ public:
 	inline void setAlignment(Alignment align) { mAlignment = align; }
 
 	inline void setCursorChangedCallback(const std::function<void(CursorState state)>& func) { mCursorChangedCallback = func; }
+	inline void setFavoriteIndicatorCallback(const std::function<bool(const T&)>& func) { mFavoriteIndicatorCallback = func; }
 
 	inline void setFont(const std::shared_ptr<Font>& font)
 	{
@@ -109,17 +110,20 @@ private:
 	bool mSelectorColorGradientHorizontal = true;
 	unsigned int mSelectedColor;
 	std::string mScrollSound;
+	std::function<bool(const T&)> mFavoriteIndicatorCallback;
 	static const unsigned int COLOR_ID_COUNT = 2;
 	unsigned int mColors[COLOR_ID_COUNT];
 	int mViewportHeight;
 	int mCursorPrev = -1;
 
 	ImageComponent mSelectorImage;
+	ImageComponent mFavoriteIcon;
+	bool mFavoriteIconVisible;
 };
 
 template <typename T>
 TextListComponent<T>::TextListComponent(Window* window) :
-	IList<TextListData, T>(window), mSelectorImage(window)
+	IList<TextListData, T>(window), mSelectorImage(window), mFavoriteIcon(window)
 {
 	mMarqueeOffset = 0;
 	mMarqueeOffset2 = 0;
@@ -139,6 +143,9 @@ TextListComponent<T>::TextListComponent(Window* window) :
 	mSelectedColor = 0;
 	mColors[0] = 0x0000FFFF;
 	mColors[1] = 0x00FF00FF;
+
+	mFavoriteIcon.setImage(":/heart_filled.svg");
+	mFavoriteIconVisible = true;
 }
 
 template <typename T>
@@ -204,6 +211,12 @@ void TextListComponent<T>::render(const Transform4x4f& parentTrans)
 
 		entry.data.textCache->setColor(color);
 
+		const bool showFavorite = mFavoriteIconVisible && mFavoriteIcon.hasImage() && (mFavoriteIndicatorCallback ? mFavoriteIndicatorCallback(entry.object) : false);
+		const float iconSize = entrySize * 0.60f;
+		const float iconGap = showFavorite ? (iconSize * 0.35f) : 0.0f;
+		const float textWidth = entry.data.textCache->metrics.size.x();
+		const float lineWidth = showFavorite ? (iconSize + iconGap + textWidth) : textWidth;
+
 		Vector3f offset(0, y, 0);
 
 		switch(mAlignment)
@@ -212,26 +225,41 @@ void TextListComponent<T>::render(const Transform4x4f& parentTrans)
 			offset[0] = mHorizontalMargin;
 			break;
 		case ALIGN_CENTER:
-			offset[0] = (int)((mSize.x() - entry.data.textCache->metrics.size.x()) / 2);
+			offset[0] = (int)((mSize.x() - lineWidth) / 2);
 			if(offset[0] < mHorizontalMargin)
 				offset[0] = mHorizontalMargin;
 			break;
 		case ALIGN_RIGHT:
-			offset[0] = (mSize.x() - entry.data.textCache->metrics.size.x());
+			offset[0] = (mSize.x() - lineWidth);
 			offset[0] -= mHorizontalMargin;
 			if(offset[0] < mHorizontalMargin)
 				offset[0] = mHorizontalMargin;
 			break;
 		}
 
+		float rowScrollOffset = 0.0f;
+		if((mCursor == i) && (mMarqueeOffset > 0))
+			rowScrollOffset = (float)mMarqueeOffset;
+
+		if(showFavorite)
+		{
+			Transform4x4f iconTrans = trans;
+			iconTrans.translate(offset - Vector3f(rowScrollOffset, 0, 0));
+			mFavoriteIcon.setPosition(0, (entrySize - iconSize) * 0.5f, 0);
+			mFavoriteIcon.setResize(iconSize, iconSize);
+			mFavoriteIcon.render(iconTrans);
+		}
+
+		Vector3f textOffset = offset + Vector3f(showFavorite ? (iconSize + iconGap) : 0.0f, 0, 0);
+
 		// render text
 		Transform4x4f drawTrans = trans;
 
 		// currently selected item text might be scrolling
 		if((mCursor == i) && (mMarqueeOffset > 0))
-			drawTrans.translate(offset - Vector3f((float)mMarqueeOffset, 0, 0));
+			drawTrans.translate(textOffset - Vector3f((float)mMarqueeOffset, 0, 0));
 		else
-			drawTrans.translate(offset);
+			drawTrans.translate(textOffset);
 
 		Renderer::setMatrix(drawTrans);
 		font->renderTextCache(entry.data.textCache.get());
@@ -240,8 +268,16 @@ void TextListComponent<T>::render(const Transform4x4f& parentTrans)
 		// marquee is scrolled far enough for it to repeat
 		if((mCursor == i) && (mMarqueeOffset2 < 0))
 		{
+			// also render the favorite icon alongside the wrap-around copy of the text
+			if(showFavorite)
+			{
+				Transform4x4f iconTrans2 = trans;
+				iconTrans2.translate(offset - Vector3f((float)mMarqueeOffset2, 0, 0));
+				mFavoriteIcon.render(iconTrans2);
+			}
+
 			drawTrans = trans;
-			drawTrans.translate(offset - Vector3f((float)mMarqueeOffset2, 0, 0));
+			drawTrans.translate(textOffset - Vector3f((float)mMarqueeOffset2, 0, 0));
 			Renderer::setMatrix(drawTrans);
 			font->renderTextCache(entry.data.textCache.get());
 		}
@@ -480,6 +516,21 @@ void TextListComponent<T>::applyTheme(const std::shared_ptr<ThemeData>& theme, c
 		mSelectorImage.setColorShiftEnd(mSelectorColorEnd);
 	} else {
 		mSelectorImage.setImage("");
+	}
+
+	if (elem->has("favoriteIconPath"))
+		mFavoriteIcon.setImage(elem->get<std::string>("favoriteIconPath"));
+	else
+		mFavoriteIcon.setImage(":/heart_filled.svg");
+
+	if (elem->has("favoriteIconColor"))
+		mFavoriteIcon.setColorShift(elem->get<unsigned int>("favoriteIconColor"));
+	else
+		mFavoriteIcon.setColorShift(0xFFFFFFFF);
+
+	{
+		std::string var = theme->getVariable("favoriteIconVisible");
+		mFavoriteIconVisible = (var == "true");
 	}
 }
 
