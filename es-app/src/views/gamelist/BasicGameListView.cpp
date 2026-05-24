@@ -13,6 +13,9 @@ BasicGameListView::BasicGameListView(Window* window, FileData* root)
 	mList.setSize(mSize.x(), mSize.y() * 0.8f);
 	mList.setPosition(0, mSize.y() * 0.2f);
 	mList.setDefaultZIndex(20);
+	mList.setFavoriteIndicatorCallback([](FileData* file) {
+		return file != nullptr && file->getType() == GAME && file->metadata.get("favorite") == "true";
+	});
 	addChild(&mList);
 
 	populateList(root->getChildrenListToDisplay());
