@@ -254,6 +254,10 @@ void Window::render()
 			onSleep();
 		}
 	}
+
+	// Mark the end of a frame for the texture cache so its eviction logic can
+	// distinguish textures that were just rendered from older entries.
+	TextureResource::nextBindGeneration();
 }
 
 void Window::normalizeNextUpdate()

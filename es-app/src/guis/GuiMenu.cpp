@@ -451,6 +451,11 @@ void GuiMenu::openOtherSettings()
 	s->addWithLabel("PARSE GAMESLISTS ONLY", parse_gamelists);
 	s->addSaveFunc([parse_gamelists] { Settings::getInstance()->setBool("ParseGamelistOnly", parse_gamelists->getState()); });
 
+	auto async_file_io = std::make_shared<SwitchComponent>(mWindow);
+	async_file_io->setState(Settings::getInstance()->getBool("AsyncFileIO"));
+	s->addWithLabel("ASYNC FILE IO", async_file_io);
+	s->addSaveFunc([async_file_io] { Settings::getInstance()->setBool("AsyncFileIO", async_file_io->getState()); });
+
 	auto local_art = std::make_shared<SwitchComponent>(mWindow);
 	local_art->setState(Settings::getInstance()->getBool("LocalArt"));
 	s->addWithLabel("SEARCH FOR LOCAL ART", local_art);

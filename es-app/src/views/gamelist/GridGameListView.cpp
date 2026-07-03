@@ -323,9 +323,9 @@ void GridGameListView::updateInfoPanel()
 		}
 		mVideoPlaying = true;
 
-		mVideo->setImage(file->getThumbnailPath());
-		mMarquee.setImage(file->getMarqueePath());
-		mImage.setImage(file->getImagePath());
+		mVideo->setImageAsync(file->getThumbnailPath());
+		mMarquee.setImageAsync(file->getMarqueePath());
+		mImage.setImageAsync(file->getImagePath());
 
 		mDescription.setText(file->metadata.get("desc"));
 		mDescContainer.reset();

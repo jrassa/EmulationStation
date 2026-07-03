@@ -240,8 +240,13 @@ protected:
 		if(mScrollVelocity == 0 || size() < 2)
 			return;
 
-		mScrollCursorAccumulator += deltaTime;
-		mScrollTierAccumulator += deltaTime;
+		// Cap the delta time used for scrolling to prevent multiple scroll jumps
+		// after a long-blocking frame (e.g., slow NAS I/O)
+		const int maxScrollDelta = mTierList.tiers[mScrollTier].scrollDelay;
+		int scrollDelta = (deltaTime > maxScrollDelta) ? maxScrollDelta : deltaTime;
+
+		mScrollCursorAccumulator += scrollDelta;
+		mScrollTierAccumulator += scrollDelta;
 
 		// we delay scrolling until after scroll tier has updated so isScrolling() returns accurately during onCursorChanged callbacks
 		// we don't just do scroll tier first because it would not catch the scrollDelay == tier length case
